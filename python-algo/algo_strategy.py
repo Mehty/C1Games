@@ -26,6 +26,67 @@ class AlgoStrategy(gamelib.AlgoCore):
         super().__init__()
         random.seed()
 
+    def position_to_index(self, position):
+        """ 
+        Accepts position as a tuple and returns vector index of position
+        """
+        column, row = position
+        opponent_position = False
+        if (row > 13):
+            opponent_position = True
+            row = 27 - row
+        idx_in_row = column - (13 - row)
+        ids_below_row = row * (row + 1)
+        idx = idx_in_row + ids_below_row
+        if (opponent_position):
+            idx += 210
+        return idx
+
+
+    def index_to_position(self, idx):
+        """ 
+        Accepts vector index of position and returns position as a tuple
+        """
+        opponent_idx = False
+        if (idx > 209):
+            opponent_idx = True
+            idx = idx - 210
+        row = 0
+        while ((row+1)*(row+2) < idx):
+            row+=1
+        idx_in_row = idx - row*(row+1)
+        column = idx_in_row + 13 - row
+        if (opponent_idx):
+            row = 27 - row
+        return (column, row)
+
+    def side_position_to_index(self, position):
+        """ 
+        Accepts position as a tuple and returns vector index of position
+        """
+        column, row = position
+        opponent_position = row > 13
+        if (opponent_position):
+            return column + 28
+        return column
+
+    def side_index_to_position(self, idx):
+        """ 
+        Accepts vector index of position and returns position as a tuple
+        """
+        opponent_idx = idx > 27
+        if (opponent_idx):
+            column = idx - 28
+        else:
+            column = idx
+        if (column < 14):
+            row = 13 - column
+        else:
+            row = column - 14
+        if (opponent_idx):
+            row = 27 - row
+        return (column, row)
+
     def on_game_start(self, config):
         """ 
         Read in config and perform any initial setup here 
