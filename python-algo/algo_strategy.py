@@ -26,6 +26,27 @@ class AlgoStrategy(gamelib.AlgoCore):
         super().__init__()
         random.seed()
 
+    def populate_action_space(self):
+        loc_ids = [x for x in range(210)]
+        edge_loc_ids = get_edge_loc_ids()
+        non_edge_loc_ids = [x for x in loc_ids if x not in edge_loc_ids]
+        global action_space
+        action_space = []
+
+        # Populate Firewall units actions
+        for l in non-edge_loc_ids:
+            # remove action
+            action_space.append('r{}'.format(l))
+            for t in range(3):
+                action_space.append('s{}{}'.format(t, l))
+
+        # Populate Information units actions
+        for l in non-edge_loc_ids:
+            # remove action
+            action_space.append('r{}'.format(l))
+            for t in range(3, 6):
+                action_space.append('s{}{}'.format(t, l))
+
     def on_game_start(self, config):
         """ 
         Read in config and perform any initial setup here 
